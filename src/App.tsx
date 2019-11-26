@@ -1,24 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { OrdersApi } from './api/OrdersApi';
+import { CustomerList } from './component/CustomerList';
+
+const ordersApi = new OrdersApi();
+
+function changeDisplayedHost(customerName: string): void {
+
+}
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <CustomerList
+        orderSummariesPromise={ordersApi.getOrderSummariesByCustomer()}
+        changeDisplayedHost={changeDisplayedHost}
+      />
     </div>
   );
 }

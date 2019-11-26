@@ -4,7 +4,6 @@ import { Component } from "react";
 import Grid from '@material-ui/core/Grid';
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
-import { orderSummaries } from "../api/orderSummaries";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
@@ -14,7 +13,8 @@ import { List, makeStyles, Paper, Typography, Divider, Chip } from "@material-ui
 import { OrderSummary } from "../api/OrderSummary";
 
 export interface Props {
-  orderSummaries: OrderSummary[];
+  orderSummariesPromise: Promise<{ [customerName: string]: OrderSummary[] }>;
+  changeDisplayedHost: (customerName: string) => void;
 }
 
 interface State {
@@ -27,7 +27,7 @@ interface OrderTotal {
   totalSpend: number,
 }
 
-export class HostList extends Component<Props, State> {
+export class CustomerList extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
@@ -42,11 +42,14 @@ export class HostList extends Component<Props, State> {
 
   async componentDidMount() {
     // Calculate total spending for each customer over all orders
-    const customerSpendTotalMap = this.props.orderSummaries.reduce((accumulator, orderSummary) => {
-      accumulator[orderSummary.customerName] = accumulator[orderSummary.customerName] !== undefined
-        ? accumulator[orderSummary.customerName] = accumulator[orderSummary.customerName] + orderSummary.totalPrice
-        : orderSummary.totalPrice
-    }, {} as any);
+    const orderSummaries = await this.props.orderSummariesPromise;
+    const customerSpendTotalMap = Object.keys(orderSummaries).reduce((accumulator, customerName) => {
+      const totalSpend = orderSummaries[customerName].reduce((totalSpend, orderSummary) => {
+        return totalSpend + orderSummary.totalPrice;
+      }, 0)
+      accumulator[customerName] = totalSpend;
+      return accumulator;
+    }, {} as { [customerName: string]: number });
 
     // Convert that map to an array and sort it based on spend amount
     const customerSpendTotals: OrderTotal[] = Object.keys(customerSpendTotalMap)
@@ -62,43 +65,32 @@ export class HostList extends Component<Props, State> {
 
   render(): JSX.Element {
     const allAddresses = this.state.customerData.map((customerData) => {
+      const selected: boolean = (this.state.displayedCustomer !== undefined && (this.state.displayedCustomer === customerData.name))
       return (
         <ListItem
           key={customerData.name}
-          selected={(this.state.displayedCustomer && this.state.displayedCustomer === customerData.name)}
-          onClick={event => this.changeDisplayedHost(address)}
+          selected={selected}
+          onClick={event => this.props.changeDisplayedHost(customerData.name)}
         >
-          <ListItemAvatar>
+          {/* <ListItemAvatar>
             <Avatar>
               <DesktopWindowsIcon />
             </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary={address} />
+          </ListItemAvatar> */}
+          <ListItemText
+            primary={customerData.name}
+            secondary={`$${customerData.totalSpend}`}
+          />
         </ListItem>
       );
     })
     return (
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="flex-start"
-        spacing={5}
-      >
-        <Grid item xs={2}>
-          <List style={{
-            overflow: 'auto',
-            maxHeight: 500
-          }}>
-            {allAddresses}
-          </List>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper>
-            {this.getHostSummary()}
-          </Paper>
-        </Grid>
-      </Grid>
+      <List style={{
+        overflow: 'auto',
+        maxHeight: 500
+      }}>
+        {allAddresses}
+      </List>
     );
   }
 }
