@@ -9,9 +9,6 @@ import clsx from 'clsx';
 
 
 const useStyles = makeStyles(theme => ({
-  // card: {
-  //   maxWidth: 345,
-  // },
   expand: {
     transform: 'rotate(0deg)',
     marginLeft: 'auto',
@@ -22,12 +19,6 @@ const useStyles = makeStyles(theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  // paper: {
-  //   marginTop: theme.spacing(3),
-  //   width: '100%',
-  //   overflowX: 'auto',
-  //   marginBottom: theme.spacing(2),
-  // },
   table: {
     minWidth: 350,
   },

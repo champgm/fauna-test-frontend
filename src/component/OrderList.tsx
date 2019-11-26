@@ -8,7 +8,6 @@ import { OrderSummaryCard } from './OrderSummaryCard';
 
 export interface Props {
   orderSummariesPromise: Promise<{ [customerName: string]: OrderSummary[] }>;
-  // changeSelectedCustomer: (customerName: string) => void;
   selectedCustomerName?: string;
 }
 

@@ -21,11 +21,6 @@ export class OrderSummaryContainer extends Component<{}, State> {
     this.state = {};
   }
 
-
-  // async componentDidMount() {
-
-  // }
-
   changeSelectedCustomer(customerName: string): void {
     console.log(`Selecting customer: ${customerName}`);
     this.setState({ selectedCustomerName: customerName })
