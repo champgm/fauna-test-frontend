@@ -6,3 +6,20 @@
 
 2019-11-26 09:21 start
 2019-11-26 09:38 stop
+
+2019-11-26 11:34 start
+2019-11-26 11:45 stop
+
+2019-11-26 11:50 start
+2019-11-26 11:56 stop
+
+2019-11-26 12:04 start
+2019-11-26 12:20 stop
+
+# 2019-11-26 13:23 start
+# 2019-11-26 13:26 false start?
+took a bit to figure some React hook stuff out
+2019-11-26 13:42 start
+2019-11-26 14:06 stop
+
+~2 hours to get it functional

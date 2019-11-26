@@ -1,25 +1,19 @@
 
 import React from "react";
 import { Component } from "react";
-import Grid from '@material-ui/core/Grid';
-import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
-import { List, makeStyles, Paper, Typography, Divider, Chip } from "@material-ui/core";
+import { List } from "@material-ui/core";
 import { OrderSummary } from "../api/OrderSummary";
 
 export interface Props {
   orderSummariesPromise: Promise<{ [customerName: string]: OrderSummary[] }>;
-  changeDisplayedHost: (customerName: string) => void;
+  changeSelectedCustomer: (customerName: string) => void;
+  selectedCustomerName?: string;
 }
 
 interface State {
   customerData: OrderTotal[];
-  displayedCustomer?: string;
 }
 
 interface OrderTotal {
@@ -65,18 +59,14 @@ export class CustomerList extends Component<Props, State> {
 
   render(): JSX.Element {
     const allAddresses = this.state.customerData.map((customerData) => {
-      const selected: boolean = (this.state.displayedCustomer !== undefined && (this.state.displayedCustomer === customerData.name))
+      const selected: boolean = this.props.selectedCustomerName !== undefined
+        && (this.props.selectedCustomerName === customerData.name)
       return (
         <ListItem
           key={customerData.name}
           selected={selected}
-          onClick={event => this.props.changeDisplayedHost(customerData.name)}
+          onClick={event => this.props.changeSelectedCustomer(customerData.name)}
         >
-          {/* <ListItemAvatar>
-            <Avatar>
-              <DesktopWindowsIcon />
-            </Avatar>
-          </ListItemAvatar> */}
           <ListItemText
             primary={customerData.name}
             secondary={`$${customerData.totalSpend}`}
