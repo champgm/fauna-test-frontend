@@ -8,7 +8,7 @@ const get = {
 export class OrdersApi {
   async getOrderSummariesByCustomer(): Promise<{ [customerName: string]: OrderSummary[] }> {
     try {
-      const uri = `fauna-test-backend/order-summary/`;
+      const uri = `order-summary/`;
       const fetchResult = await fetch(uri, get);
       const orderSummaries: OrderSummary[] = (await fetchResult.json()).payload;
       return orderSummaries.reduce((accumulator, orderSummary) => {
