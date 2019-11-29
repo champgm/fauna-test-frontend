@@ -35,5 +35,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080/"
+  "proxy": "http://localhost:8080/",
+  "homepage": "https://09mnthpgkd.execute-api.us-east-1.amazonaws.com/dev/fauna-test"
 }
